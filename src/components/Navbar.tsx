@@ -7,8 +7,6 @@ import { HandPlatter, Loader2, Menu, Moon, PackageCheck, ShoppingCart, SquareMen
 import { Avatar } from './ui/avatar';
 import { AvatarFallback, AvatarImage } from '@radix-ui/react-avatar';
 import { Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from './ui/sheet';
-import { Label } from './ui/label';
-import { Input } from './ui/input';
 import { Separator } from './ui/separator';
 
 
@@ -21,7 +19,7 @@ const Navbar: React.FC = () => {
                 <Link to={"/"}>
                     <h1 className='font-bold md:font-extrabold text-2xl'>Melody Eats</h1>
                 </Link>
-                <div className='hidden md:flex items-center gap-10'>
+                <div className='hidden md:flex items-center gap-8'>
                     <div className='hidden md:flex items-center gap-6'>
                         <Link to={"/"}>Home</Link>
                         <Link to={"/profile"}>Profile</Link>
