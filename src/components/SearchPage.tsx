@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import FilterPage from './FilterPage';
 import { Input } from './ui/input';
 import { Button } from './ui/button';
@@ -8,10 +8,11 @@ import { Globe, MapPin, X } from 'lucide-react';
 import { Card, CardContent, CardFooter } from './ui/card';
 import { AspectRatio } from './ui/aspect-ratio';
 import HeroImage from "@/assets/hero_pizza.png";
-
+import { Skeleton } from './ui/skeleton';
 
 const SearchPage: React.FC = () => {
     const params = useParams();
+    const navigate = useNavigate();
     const [searchQuery, setSearchQuery] = useState<string>("");
     return (
         <div className='max-w-7xl mx-auto my-10'>
@@ -86,12 +87,13 @@ const SearchPage: React.FC = () => {
                                 </CardContent>
                                 <CardFooter className='p-4 border-t dark:border-t-gray-700 border-t-gray-100 text-white flex justify-end'>
                                     <Link to={`/resturant/${123}`}>
-                                        <Button className='bg-orange hover:bg-hoverOrange font-semibold py-2 px-4 rounded-full shadow-md transition-colors duration-200'>
+                                        <Button className='bg-orange hover:bg-hoverOrange font-semibold py-2 px-4 rounded-full shadow-md transition-colors duration-200'
+                                        >
                                             View Menus
                                         </Button>
                                     </Link>
                                 </CardFooter>
-                            </Card>
+                                    </Card>
                                 ) )
                             }
                             
@@ -103,4 +105,59 @@ const SearchPage: React.FC = () => {
     )
 }
 
-export default SearchPage
+export default SearchPage;
+
+const SearchPageSkeleton = () => {
+    return (
+        <>
+            {[...Array(3)].map((_, index) => (
+            <Card
+                key={index}
+                className="bg-white dark:bg-gray-800 shadow-xl rounded-xl overflow-hidden"
+            >
+                <div className="relative">
+                <AspectRatio ratio={16 / 6}>
+                    <Skeleton className="w-full h-full" />
+                </AspectRatio>
+                </div>
+                <CardContent className="p-4">
+                <Skeleton className="h-8 w-3/4 mb-2" />
+                <div className="mt-2 gap-1 flex items-center text-gray-600 dark:text-gray-400">
+                    <Skeleton className="h-4 w-1/2" />
+                </div>
+                <div className="mt-2 flex gap-1 items-center text-gray-600 dark:text-gray-400">
+                    <Skeleton className="h-4 w-1/2" />
+                </div>
+                <div className="flex gap-2 mt-4 flex-wrap">
+                    <Skeleton className="h-6 w-20" />
+                    <Skeleton className="h-6 w-20" />
+                    <Skeleton className="h-6 w-20" />
+                </div>
+                </CardContent>
+                <CardFooter className="p-4  dark:bg-gray-900 flex justify-end">
+                <Skeleton className="h-10 w-24 rounded-full" />
+                </CardFooter>
+            </Card>
+            ))}
+        </>
+        );
+    };
+
+const NoResultFound = ({ searchText }: { searchText: string }) => {
+        return (
+        <div className="text-center">
+            <h1 className="text-2xl font-semibold text-gray-700 dark:text-gray-200">
+            No results found
+            </h1>
+            <p className="mt-2 text-gray-500 dark:text-gray-400">
+            We couldn't find any results for "{searchText}". <br /> Try searching
+            with a different term.
+            </p>
+            <Link to="/">
+            <Button className="mt-4 bg-orange hover:bg-orangeHover">
+                Go Back to Home
+            </Button>
+            </Link>
+        </div>
+        );
+    };
