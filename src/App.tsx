@@ -9,6 +9,7 @@ import MainLayout from "./layout/MainLayout";
 import Profile from "./components/Profile";
 import SearchPage from "./components/SearchPage";
 import ResturantDetail from "./components/ResturantDetail";
+import Cart from "./components/Cart";
 
 const appRouter = createBrowserRouter([ {
     path: "/",
@@ -29,6 +30,10 @@ const appRouter = createBrowserRouter([ {
       {
         path: "/resturant/:id",
         element: <ResturantDetail />
+      },
+      {
+        path: "/cart",
+        element: <Cart />
       },
     ]
   },
