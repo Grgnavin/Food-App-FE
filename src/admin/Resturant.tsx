@@ -119,8 +119,9 @@ const Resturant: React.FC = () => {
                             <div>
                                 <Label>Upload Resturant Image</Label>
                                 <Input
+                                    onChange={(e) => setInput({...input, imageFile: e.target.files?.[0] || undefined})}
                                     type='file'
-                                    name='image'
+                                    name='imageFile'
                                     accept='image/*'
                                 />
                                 {
