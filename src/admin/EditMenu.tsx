@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { MenuSchema } from "@/schema/menuSchema";
 import { Loader2 } from "lucide-react";
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 
@@ -34,12 +35,18 @@ const EditMenu = ({
     price: 0,
     image: undefined
 });
+const[error, setError] = useState<Partial<MenuFormSchema>>({});
 const loading = false;
 
   const SubmitHandler = (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       console.log(input);
-      
+      const res = MenuSchema.safeParse(input);
+        if (!res.success) {
+            const fieldError = res.error.formErrors.fieldErrors;
+            setError(fieldError as Partial<MenuFormSchema>);
+            return;
+        }
   }; 
 
 const ChangeEventHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -77,6 +84,9 @@ useEffect(() => {
                 placeholder="Enter menu name"
                 name="name"
               />
+              {
+                error && <span className='text-xs text-red-600 font-medium'>{error.name}</span>
+              }
             </div>
             <div>
               <Label>Description</Label>
@@ -87,6 +97,9 @@ useEffect(() => {
                 placeholder="Enter menu description"
                 name="description"
               />
+              {
+                error && <span className='text-xs text-red-600 font-medium'>{error.description}</span>
+              }
             </div>
             <div>
               <Label>Price in (Rupees)</Label>
@@ -97,6 +110,9 @@ useEffect(() => {
                 placeholder="Enter menu price"
                 name="price"
               />
+              {
+                error && <span className='text-xs text-red-600 font-medium'>{error.price}</span>
+              }
             </div>
             <div>
               <Label>Upload menu Image</Label>
@@ -107,6 +123,9 @@ useEffect(() => {
                 }
                 name="image"
               />
+              {
+                error && <span className='text-xs text-red-600 font-medium'>{error.image?.name}</span>
+              }
             </div>
             <DialogFooter className="mt-5">
               {loading ? (

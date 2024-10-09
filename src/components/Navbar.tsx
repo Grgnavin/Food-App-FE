@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import React from 'react'
 import { Menubar, MenubarContent, MenubarItem, MenubarMenu, MenubarTrigger } from './ui/menubar';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from './ui/dropdown-menu';
@@ -23,7 +23,7 @@ const Navbar: React.FC = () => {
                     <div className='hidden md:flex items-center gap-6'>
                         <Link to={"/"}>Home</Link>
                         <Link to={"/profile"}>Profile</Link>
-                        <Link to={"/order/status"}>Order</Link>
+                        <Link to={"/admin/orders"}>Order</Link>
                     {
                         admin && (
                             <Menubar>
@@ -100,63 +100,70 @@ const Navbar: React.FC = () => {
 export default Navbar;
 
 const MobileNavbar = () => {
+    const navigate = useNavigate();
+
+    const handleNavigation = (path: string) => {
+        navigate(path);
+        document.getElementById("close-sheet")?.click();
+    };
+
     return (
-            <Sheet>
-        <SheetTrigger asChild>
-            <Button size={'icon'} className='rounded-full bg-gray-200 hover:bg-gray-200 text-black' variant="outline">
-                <Menu size={'18'}/>
-            </Button>
-        </SheetTrigger>
-        <SheetContent className='flex flex-col'>
-            <SheetHeader className='flex flex-row items-center justify-between mt-2'>
-            <SheetTitle>Melody Eats</SheetTitle>
-            <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="outline" size="icon">
-                        <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-                        <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-                        <span className="sr-only">Toggle theme</span>
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                        <DropdownMenuItem>
-                            Light
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>
-                            Dark
-                        </DropdownMenuItem>
-                    </DropdownMenuContent>
-                </DropdownMenu>
-            </SheetHeader>
-            <Separator className='my-2'/>
-            <SheetDescription className='flex-1'>
-                <Link to={"/profile"} className='flex items-center gap-4 hover:bg-gray-200 px-3 py-2 rounded-lg cursor-pointer hover:text-gray-900 font-medium'>
-                    <User/>
-                    <span>Profile</span>
-                </Link>
-                <Link to={"/profile"} className='flex items-center gap-4 hover:bg-gray-200 px-3 py-2 rounded-lg cursor-pointer hover:text-gray-900 font-medium'>
-                    <HandPlatter/>
-                    <span>Order</span>
-                </Link>
-                <Link to={"/cart"} className='flex items-center gap-4 hover:bg-gray-200 px-3 py-2 rounded-lg cursor-pointer hover:text-gray-900 font-medium'>
-                    <ShoppingCart/>
-                    <span>Cart (0)</span>
-                </Link>
-                <Link to={"/profile"} className='flex items-center gap-4 hover:bg-gray-200 px-3 py-2 rounded-lg cursor-pointer hover:text-gray-900 font-medium'>
-                    <SquareMenu/>
-                    <span>Menu</span>
-                </Link>
-                <Link to={"/admin/resturant"} className='flex items-center gap-4 hover:bg-gray-200 px-3 py-2 rounded-lg cursor-pointer hover:text-gray-900 font-medium'>
-                    <UtensilsCrossed/>
-                    <span>Resturant</span>
-                </Link>
-                <Link to={"/profile"} className='flex items-center gap-4 hover:bg-gray-200 px-3 py-2 rounded-lg cursor-pointer hover:text-gray-900 font-medium'>
-                    <PackageCheck/>
-                    <span>Resturant Orders</span>
-                </Link>
-            </SheetDescription>
-            <SheetFooter className='flex flex-col gap-4'>   
-                <div className='flex flex-row items-center gap-2'>
+        <Sheet>
+            <SheetTrigger asChild>
+                <Button size={'icon'} className='rounded-full bg-gray-200 hover:bg-gray-200 text-black' variant="outline">
+                    <Menu size={'18'}/>
+                </Button>
+            </SheetTrigger>
+            <SheetContent className='flex flex-col'>
+                <SheetHeader className='flex flex-row items-center justify-between mt-2'>
+                    <SheetTitle>Melody Eats</SheetTitle>
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button variant="outline" size="icon">
+                                <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+                                <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+                                <span className="sr-only">Toggle theme</span>
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                            <DropdownMenuItem>
+                                Light
+                            </DropdownMenuItem>
+                            <DropdownMenuItem>
+                                Dark
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                </SheetHeader>
+                <Separator className='my-2'/>
+                <SheetDescription className='flex-1'>
+                    <div onClick={() => handleNavigation("/profile")} className='flex items-center gap-4 hover:bg-gray-200 px-3 py-2 rounded-lg cursor-pointer hover:text-gray-900 font-medium'>
+                        <User/>
+                        <span>Profile</span>
+                    </div>
+                    <div onClick={() => handleNavigation("/order/status")} className='flex items-center gap-4 hover:bg-gray-200 px-3 py-2 rounded-lg cursor-pointer hover:text-gray-900 font-medium'>
+                        <HandPlatter/>
+                        <span>Order</span>
+                    </div>
+                    <div onClick={() => handleNavigation("/cart")} className='flex items-center gap-4 hover:bg-gray-200 px-3 py-2 rounded-lg cursor-pointer hover:text-gray-900 font-medium'>
+                        <ShoppingCart/>
+                        <span>Cart (0)</span>
+                    </div>
+                    <div onClick={() => handleNavigation("/admin/menu")} className='flex items-center gap-4 hover:bg-gray-200 px-3 py-2 rounded-lg cursor-pointer hover:text-gray-900 font-medium'>
+                        <SquareMenu/>
+                        <span>Menu</span>
+                    </div>
+                    <div onClick={() => handleNavigation("/admin/resturant")} className='flex items-center gap-4 hover:bg-gray-200 px-3 py-2 rounded-lg cursor-pointer hover:text-gray-900 font-medium'>
+                        <UtensilsCrossed/>
+                        <span>Resturant</span>
+                    </div>
+                    <div onClick={() => handleNavigation("/admin/orders")} className='flex items-center gap-4 hover:bg-gray-200 px-3 py-2 rounded-lg cursor-pointer hover:text-gray-900 font-medium'>
+                        <PackageCheck/>
+                        <span>Resturant Orders</span>
+                    </div>
+                </SheetDescription>
+                <SheetFooter className='flex flex-col gap-4'>   
+                    <div className='flex flex-row items-center gap-2'>
                         <Avatar>
                             <AvatarImage/>
                             <AvatarFallback>CN</AvatarFallback>
@@ -164,12 +171,15 @@ const MobileNavbar = () => {
                         <h1 className='font-semibold'>Melody Gurung</h1>
                     </div> 
                     <div>
-                    <SheetClose asChild>
-                        <Button type="submit" className='bg-orange hover:bg-hoverOrange w-full'>Logout</Button>
-                    </SheetClose>
+                        <SheetClose asChild>
+                            <Button type="submit" className='bg-orange hover:bg-hoverOrange w-full'>Logout</Button>
+                        </SheetClose>
                     </div>
-            </SheetFooter>
-        </SheetContent>
+                </SheetFooter>
+            </SheetContent>
+            <SheetClose asChild id="close-sheet">
+                <div />
+            </SheetClose>
         </Sheet>
     )
 }

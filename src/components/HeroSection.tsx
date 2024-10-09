@@ -13,7 +13,9 @@ const HeroSection: React.FC = () => {
             <div className='flex flex-col gap-10 md:w-[40%]'>
                 <div className='flex flex-col gap-5'>
                     <h1 className='font-bold md:font-extrabold md:text-5xl text-4xl'>Order Food antime & anywhere</h1>
-                    <p className='text-gray-500 '>Hey Out Delecious Food is waiting for you, we are always near to you.</p>
+                    <p className='text-gray-500'>
+                        Craving Something Delicious? We Bring Fresh Flavors Straight to Your Doorstep, Anytime, Anywhere!
+                    </p>
                 </div>
                 <div className='relative flex items-center gap-2'>
                     <Input
