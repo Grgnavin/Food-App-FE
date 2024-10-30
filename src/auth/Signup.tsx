@@ -5,6 +5,7 @@ import { Button } from '../components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Link } from "react-router-dom"
 import { SignupInput, userSignupSchema } from '@/schema/userSchema';
+import { useUserStore } from '@/store/useUserStore';
 
 // type SignupInput = {
 //     fullname: string;
@@ -20,6 +21,7 @@ const Signup: React.FC = () => {
         fullname: "",
         contact: ""
     });
+    const { signup, loading } = useUserStore();
     const[errors, setErrors] = useState<Partial<SignupInput>>({});
     const changeEventHandler = (e:React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -34,9 +36,8 @@ const Signup: React.FC = () => {
             return;
         }
         //api implement
-        console.log(input);
+        await signup(input);
     }
-    const loading = false;
 
     return (
         <div className='flex items-center justify-center min-h-screen'>

@@ -83,7 +83,9 @@ const Navbar: React.FC = () => {
                     {
                         loading ? 
                             <Button disabled className='w-full bg-orange hover:bg-hoverOrange'><Loader2 className='mr-2 h-4 w-4 animate-spin'/> Please wait</Button> 
-                            : <Button type='submit' className='w-full  bg-orange hover:bg-hoverOrange'>Logout</Button>
+                            : <Button type='submit' className='w-full  bg-orange hover:bg-hoverOrange'>
+                                    Logout
+                                </Button>
                     }
                     </div>
                 </div>

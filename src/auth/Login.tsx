@@ -5,6 +5,7 @@ import { Button } from '../components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Link } from "react-router-dom"
 import { LoginInput, userLoginSchema } from '@/schema/userSchema';
+import { useUserStore } from '@/store/useUserStore';
 
 // type LoginInput = {
 //     email: string;
@@ -16,6 +17,7 @@ const Login: React.FC = () => {
         email: "",
         password: ""
     });
+    const { loading, login } = useUserStore();
     const[errors, setErrors] = useState<Partial<LoginInput>>({});
     const changeEventHandler = (e:React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -29,9 +31,8 @@ const Login: React.FC = () => {
             setErrors(fieldError as Partial<LoginInput>);
             return;
         }
-        console.log(input);
+        await login(input);
     }
-    const loading = false;
 
     return (
         <div className='flex items-center justify-center min-h-screen'>
