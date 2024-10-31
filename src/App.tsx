@@ -1,5 +1,5 @@
 import Login from "./auth/Login";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, Navigate, RouterProvider } from "react-router-dom";
 import Signup from "./auth/Signup";
 import ForgotPassword from "./auth/ForgotPassword";
 import ResetPassowrd from "./auth/ResetPassword";
@@ -14,70 +14,122 @@ import Resturant from "./admin/Resturant";
 import AddMenu from "./admin/AddMenu";
 import Orders from "./admin/Orders";
 import SuccessPage from "./components/SuccessPage";
+import { useUserStore } from "./store/useUserStore";
+
+const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+  const { isAuthenticated, user } = useUserStore();
+  if (!isAuthenticated) {
+    return <Navigate to={'/login'} replace/>
+  }
+  if (!user?.isVerified) {
+    return <Navigate to={'/verify-email'} replace/>
+  }
+  return children;
+};
+
+const AuthenticatedUser = ({ children }: { children: React.ReactNode }) => {
+  const { isAuthenticated, user } = useUserStore();
+  if (isAuthenticated && user?.isVerified) {
+    return <Navigate to={'/'} replace/>
+  }
+  return children;
+}
+
+const AdminRoute = ({ children }: { children: React.ReactNode }) => {
+  const { isAuthenticated, user } = useUserStore();
+  if (!isAuthenticated) {
+    return <Navigate to={'/login'} replace/>
+  }
+  if (!user?.admin) {
+    return <Navigate to={'/'} replace/>
+  }
+  return children;
+}
 
 const appRouter = createBrowserRouter([ {
     path: "/",
-    element: <MainLayout />, 
-    children: [
-      {
-        path: "/",
-        element: <HeroSection />
+    element: 
+      <ProtectedRoute>
+        <MainLayout />
+      </ProtectedRoute>,
+        children: [
+          {
+            path: "/",
+            element: <HeroSection />
+          },
+          {
+            path: "/profile",
+            element: <Profile />
+          },
+          {
+            path: "/search/:text",
+            element: <SearchPage />
+          },
+          {
+            path: "/resturant/:id",
+            element: <ResturantDetail />
+          },
+          {
+            path: "/cart",
+            element: <Cart />
+          },
+          {
+            path: "/order/status",
+            element: <SuccessPage />
+          },
+          //admin servies start from here
+          {
+            path: "/admin/resturant",
+            element: 
+              <AdminRoute>
+                <Resturant />
+              </AdminRoute>
+          },
+          {
+            path: "/admin/menu",
+            element: 
+              <AdminRoute>
+                <AddMenu />
+              </AdminRoute>
+          },
+          {
+            path: "/admin/orders",
+            element: 
+              <AdminRoute>
+                <Orders />
+              </AdminRoute>
+          },
+        ]
       },
       {
-        path: "/profile",
-        element: <Profile />
+        path: "/login",
+        element: 
+          <AuthenticatedUser>
+            <Login /> 
+          </AuthenticatedUser>
       },
       {
-        path: "/search/:text",
-        element: <SearchPage />
+        path: "/signup",
+        element: 
+            <AuthenticatedUser>
+              <Signup /> 
+            </AuthenticatedUser>
       },
       {
-        path: "/resturant/:id",
-        element: <ResturantDetail />
+        path: "/forgot-password",
+        element: 
+            <AuthenticatedUser>
+              <ForgotPassword /> 
+            </AuthenticatedUser>
       },
       {
-        path: "/cart",
-        element: <Cart />
+        path: "/reset-password",
+        element: <ResetPassowrd /> 
       },
       {
-        path: "/order/status",
-        element: <SuccessPage />
-      },
-      //admin servies start from here
-      {
-        path: "/admin/resturant",
-        element: <Resturant />
-      },
-      {
-        path: "/admin/menu",
-        element: <AddMenu />
-      },
-      {
-        path: "/admin/orders",
-        element: <Orders />
-      },
-    ]
-  },
-  {
-    path: "/login",
-    element: <Login /> 
-  },
-  {
-    path: "/signup",
-    element: <Signup /> 
-  },
-  {
-    path: "/forgot-password",
-    element: <ForgotPassword /> 
-  },
-  {
-    path: "/reset-password",
-    element: <ResetPassowrd /> 
-  },
-  {
-    path: "/verify-email",
-    element: <VerifyEmail /> 
-  }
+        path: "/verify-email",
+        element: <VerifyEmail /> 
+      }
 ])
 
 function App() {
