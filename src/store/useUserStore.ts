@@ -4,14 +4,39 @@ import axios from "axios";
 import { LoginInput, SignupInput } from '@/schema/userSchema';
 import { toast } from 'sonner';
 
+type User = {
+    fullname: string,
+    email: string,
+    contact: string,
+    city: string,
+    country: string,
+    profilePicture: string,
+    admin: boolean,
+    isVerified: boolean
+}
+
+type InputType = {
+    fullname?: string,
+    email?: string,
+    address?: string,
+    city?: string,
+    country?: string,
+    profilePicture?: File
+}
+
 interface UserStore {
-    user: null,
+    user: null | User,
     isAuthenticated: boolean,
     isCheckingAuth: boolean,
     loading: boolean,
     signup: (input: SignupInput) => Promise<void>,
     login: (input: LoginInput) => Promise<void>,
-    verifyEmail: (verificationCode: string) => Promise<void>
+    verifyEmail: (verificationCode: string) => Promise<void>,
+    checkAuthentication: () => Promise<void>,
+    logout: () => Promise<void>,
+    forgotPassword: (email: string) => Promise<void>,
+    resetPassword: (token: string, newPassword: string) => Promise<void>,
+    updateProfile: (input: InputType) => Promise<void>
 }
 
 const API_END_POINT = "http://localhost:8000/api/v1/user";
@@ -42,6 +67,7 @@ export const useUserStore = create<UserStore>()(
                 toast.error(error.response.data.message);
             }
         },
+        //Login api implementation
         login: async(input: LoginInput) => {
             try {
                 set({ loading: true });
@@ -62,6 +88,7 @@ export const useUserStore = create<UserStore>()(
                 set({ loading: false });
             }
         }, 
+        //verify api implementation
         verifyEmail: async (verificationCode: string) => {
             try {
                 set({ loading: true });
@@ -81,6 +108,80 @@ export const useUserStore = create<UserStore>()(
                 toast.error(error.response?.data?.message || 'Verification failed');
             } finally {
                 set({ loading: false }); // This will handle setting loading to false in all cases
+            }
+        },
+        //checkauthentication api implementation
+        checkAuthentication: async() => {
+            try {
+                set({ isCheckingAuth: true, loading: true });
+                const res = await axios.get(`${API_END_POINT}/check-authentication`);
+                if (res.data.success) {
+                    set({ loading: false, user: res.data.user, isAuthenticated: true, isCheckingAuth: false });
+                    toast.success(res.data.message)
+                }
+            } catch (error: any) {
+                set({ loading: false, isAuthenticated: false, isCheckingAuth: true });
+                toast.error(error.response?.data.message || "Verification failed");
+            }
+        },
+        //Logout api implementation
+        logout: async() => {
+            try {
+                set({ loading: true });
+                const res = await axios.post(`${API_END_POINT}/logout`);
+                if (res.data.success) {
+                    toast.success(res.data.message);
+                    set({ loading: false, isAuthenticated: false, user: null });
+                }
+            } catch (error: any) {
+                set({ loading: false, isAuthenticated: false, isCheckingAuth: true });
+                toast.error(error.response?.data.message || "Verification failed");
+            }
+        },
+        //forgotPassword api implementation
+        forgotPassword: async(email: string) => {
+            try {
+                set({ loading: true });
+                const res = await axios.post(`${API_END_POINT}/forgot-password`, { email });
+                if (res.data.success) {
+                    toast.success(res.data.message);
+                    set({ loading: true });
+                }
+            } catch (error: any) {
+                set({ loading: false });
+                toast.error(error.response?.data.message || "Verification failed");
+            }
+        },
+        //forgotPassword api implementation
+        resetPassword: async(token: string, newPassword: string) => {
+            try {
+                set({ loading: true });
+                const res = await axios.post(`${API_END_POINT}/reset-password/${token}`, { newPassword });
+                if (res.data.success) {
+                    set({ loading: false });
+                    toast.success(res.data.message);
+                }
+            } catch (err: any) {
+                set({ loading: false });
+                toast.error(err.response?.data.message || "Verification failed");
+            }
+        },
+        //updateProfile api implementation
+        updateProfile: async(input: InputType) => {
+            try {
+                set({ loading: true });
+                const res = await axios.put(`${API_END_POINT}/profile/update`, {input}, {
+                    headers: {
+                        'Content-Type': "application/json"
+                    }
+                });
+                if (res.data.success) {
+                    set({ loading: false, user: res.data.user, isAuthenticated: true, isCheckingAuth: false });
+                    toast.success(res.data.message);
+                }
+            } catch (error: any) {
+                set({ loading: false });
+                toast.error(error.response?.data.message || "Verification failed");
             }
         }
     }),
