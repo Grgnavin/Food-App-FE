@@ -1,5 +1,4 @@
 import React from 'react'
-import Image from "@/assets/hero_pizza.png"
 import { Badge } from './ui/badge'
 import { Timer } from 'lucide-react'
 import AvailableMenu from './AvailableMenu'

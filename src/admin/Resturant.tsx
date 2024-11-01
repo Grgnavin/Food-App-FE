@@ -2,6 +2,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { ResturantFormSchema } from '@/schema/resturantSchem'
+import { useResturant } from '@/store/useResturantStore'
 import { Loader2 } from 'lucide-react'
 import React, { FormEvent, useState } from 'react'
 
@@ -22,27 +23,58 @@ const Resturant: React.FC = () => {
         deliveryTime: 0,
         cuisines: [],
         imageFile: undefined,
-    })
+    });
+    const { loading, createResturant, resturant, updateResturant } = useResturant();
     const[error, setError] = useState<Partial<InputForm>>({});
     const changeEventHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value, type } = e.target;
         setInput({ ...input, [name]: type === 'number' ? Number(value) : value });
     }
 
-    const SubmitHandler = (e: FormEvent<HTMLFormElement>) => {
+    const SubmitHandler =async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const res = ResturantFormSchema.safeParse(input);
         if (!res.success) {
             const fieldErrors = res.error.formErrors.fieldErrors;
             setError(fieldErrors as Partial<InputForm>);
             return;
+        };
+        try {
+            //make the data to form data
+            const formData = new FormData();
+            formData.append('resturantName', input.resturantName);
+            formData.append('city', input.city);
+            formData.append('country', input.country);
+            formData.append('deliveryTime', input.deliveryTime.toString());
+            formData.append('cuisines', JSON.stringify(input.cuisines));
+            
+            if (input.imageFile) {
+                formData.append('imageFile', input.imageFile);
+            }
+            
+            //api implementation
+            if (resturant) {
+                //update    
+                await updateResturant(formData);
+            }else{
+                //create
+                await createResturant(formData);
+            }
+            // formData.forEach((val, key) => {
+            //     console.log(`${key}`, val);
+            // });
+            // if (formData.has('imageFile')) {
+            //     const file = formData.get('imagefile');
+            //     console.log("ImageFile", file);
+            // }else{
+            //     console.log("No image file here");
+            // }
+        } catch (error) {
+            console.log(error);
         }
-        //api implementation
-        console.log(input);
-    }
+        console.log(input); 
+    };
 
-    const loading = false;
-    const resturant = false;
     return (
         <div className='max-w-6xl mx-auto my-10'>
             <div>

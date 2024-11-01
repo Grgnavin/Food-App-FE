@@ -3,20 +3,16 @@ import { Input } from '../components/ui/input'
 import { Loader2, LockKeyhole, Mail } from "lucide-react";
 import { Button } from '../components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { LoginInput, userLoginSchema } from '@/schema/userSchema';
 import { useUserStore } from '@/store/useUserStore';
-
-// type LoginInput = {
-//     email: string;
-//     password: string;
-// }
 
 const Login: React.FC = () => {
     const[input, setInput] = useState<LoginInput>({
         email: "",
         password: ""
     });
+    const navigate = useNavigate();
     const { loading, login } = useUserStore();
     const[errors, setErrors] = useState<Partial<LoginInput>>({});
     const changeEventHandler = (e:React.ChangeEvent<HTMLInputElement>) => {
@@ -31,7 +27,12 @@ const Login: React.FC = () => {
             setErrors(fieldError as Partial<LoginInput>);
             return;
         }
-        await login(input);
+        try {
+            await login(input);
+            navigate('/');
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     return (
