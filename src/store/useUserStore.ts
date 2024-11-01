@@ -61,6 +61,8 @@ export const useUserStore = create<UserStore>()(
                     console.log(response.data);
                     toast.success(response.data.message);
                     set({ loading: false, user: response.data.user, isAuthenticated: true });
+                }else{
+                    set({ loading: false, isAuthenticated: false });
                 }
             } catch (error: any) {
                 set({ loading: false });
@@ -80,6 +82,8 @@ export const useUserStore = create<UserStore>()(
                     console.log(response.data);
                     toast.success(response.data.message);
                     set({ loading: false, user: response.data.user, isAuthenticated: true });
+                }else{
+                    set({ loading: false, isAuthenticated: false });
                 }
             } catch (error: any) {
                 set({ loading: false });
@@ -118,6 +122,8 @@ export const useUserStore = create<UserStore>()(
                 if (res.data.success) {
                     set({ loading: false, user: res.data.user, isAuthenticated: true, isCheckingAuth: false });
                     toast.success(res.data.message)
+                }else{
+                    set({ loading: false, isAuthenticated: false });
                 }
             } catch (error: any) {
                 set({ loading: false, isAuthenticated: false, isCheckingAuth: true });
@@ -132,6 +138,8 @@ export const useUserStore = create<UserStore>()(
                 if (res.data.success) {
                     toast.success(res.data.message);
                     set({ loading: false, isAuthenticated: false, user: null });
+                }else{
+                    set({ loading: false, isAuthenticated: false });
                 }
             } catch (error: any) {
                 set({ loading: false, isAuthenticated: false, isCheckingAuth: true });
@@ -146,6 +154,8 @@ export const useUserStore = create<UserStore>()(
                 if (res.data.success) {
                     toast.success(res.data.message);
                     set({ loading: true });
+                }else{
+                    set({ loading: false, isAuthenticated: false });
                 }
             } catch (error: any) {
                 set({ loading: false });
@@ -160,6 +170,8 @@ export const useUserStore = create<UserStore>()(
                 if (res.data.success) {
                     set({ loading: false });
                     toast.success(res.data.message);
+                }else{
+                    set({ loading: false, isAuthenticated: false });
                 }
             } catch (err: any) {
                 set({ loading: false });
@@ -178,6 +190,8 @@ export const useUserStore = create<UserStore>()(
                 if (res.data.success) {
                     set({ loading: false, user: res.data.user, isAuthenticated: true, isCheckingAuth: false });
                     toast.success(res.data.message);
+                }else{
+                    set({ loading: false, isAuthenticated: false });
                 }
             } catch (error: any) {
                 set({ loading: false });

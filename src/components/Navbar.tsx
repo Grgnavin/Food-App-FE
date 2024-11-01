@@ -8,11 +8,11 @@ import { Avatar } from './ui/avatar';
 import { AvatarFallback, AvatarImage } from '@radix-ui/react-avatar';
 import { Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from './ui/sheet';
 import { Separator } from './ui/separator';
+import { useUserStore } from '@/store/useUserStore';
 
 
 const Navbar: React.FC = () => {
-    const admin = true;
-    const loading = false;
+    const { loading ,user, logout } = useUserStore();
     return (
         <div className='max-w-7xl mx-auto'>
             <div className='flex items-center justify-between h-14'>
@@ -25,7 +25,7 @@ const Navbar: React.FC = () => {
                         <Link to={"/profile"}>Profile</Link>
                         <Link to={"/admin/orders"}>Order</Link>
                     {
-                        admin && (
+                        user?.admin && (
                             <Menubar>
                                 <MenubarMenu>
                                 <MenubarTrigger>
@@ -83,7 +83,7 @@ const Navbar: React.FC = () => {
                     {
                         loading ? 
                             <Button disabled className='w-full bg-orange hover:bg-hoverOrange'><Loader2 className='mr-2 h-4 w-4 animate-spin'/> Please wait</Button> 
-                            : <Button type='submit' className='w-full  bg-orange hover:bg-hoverOrange'>
+                            : <Button onClick={() => logout()} type='submit' className='w-full  bg-orange hover:bg-hoverOrange'>
                                     Logout
                                 </Button>
                     }
@@ -103,7 +103,7 @@ export default Navbar;
 
 const MobileNavbar = () => {
     const navigate = useNavigate();
-
+    const { user, logout } = useUserStore();
     const handleNavigation = (path: string) => {
         navigate(path);
         document.getElementById("close-sheet")?.click();
@@ -151,18 +151,24 @@ const MobileNavbar = () => {
                         <ShoppingCart/>
                         <span>Cart (0)</span>
                     </div>
-                    <div onClick={() => handleNavigation("/admin/menu")} className='flex items-center gap-4 hover:bg-gray-200 px-3 py-2 rounded-lg cursor-pointer hover:text-gray-900 font-medium'>
-                        <SquareMenu/>
-                        <span>Menu</span>
-                    </div>
-                    <div onClick={() => handleNavigation("/admin/resturant")} className='flex items-center gap-4 hover:bg-gray-200 px-3 py-2 rounded-lg cursor-pointer hover:text-gray-900 font-medium'>
-                        <UtensilsCrossed/>
-                        <span>Resturant</span>
-                    </div>
-                    <div onClick={() => handleNavigation("/admin/orders")} className='flex items-center gap-4 hover:bg-gray-200 px-3 py-2 rounded-lg cursor-pointer hover:text-gray-900 font-medium'>
-                        <PackageCheck/>
-                        <span>Resturant Orders</span>
-                    </div>
+                    {
+                        user?.admin && (
+                            <>
+                                <div onClick={() => handleNavigation("/admin/menu")} className='flex items-center gap-4 hover:bg-gray-200 px-3 py-2 rounded-lg cursor-pointer hover:text-gray-900 font-medium'>
+                                    <SquareMenu/>
+                                        <span>Menu</span>
+                                </div>
+                                <div onClick={() => handleNavigation("/admin/resturant")} className='flex items-center gap-4 hover:bg-gray-200 px-3 py-2 rounded-lg cursor-pointer hover:text-gray-900 font-medium'>
+                                    <UtensilsCrossed/>
+                                    <span>Resturant</span>
+                                </div>
+                                <div onClick={() => handleNavigation("/admin/orders")} className='flex items-center gap-4 hover:bg-gray-200 px-3 py-2 rounded-lg cursor-pointer hover:text-gray-900 font-medium'>
+                                    <PackageCheck/>
+                                    <span>Resturant Orders</span>
+                                </div>
+                            </>
+                        )
+                    }
                 </SheetDescription>
                 <SheetFooter className='flex flex-col gap-4'>   
                     <div className='flex flex-row items-center gap-2'>
@@ -174,7 +180,7 @@ const MobileNavbar = () => {
                     </div> 
                     <div>
                         <SheetClose asChild>
-                            <Button type="submit" className='bg-orange hover:bg-hoverOrange w-full'>Logout</Button>
+                            <Button onClick={() => logout()} type="submit" className='bg-orange hover:bg-hoverOrange w-full'>Logout</Button>
                         </SheetClose>
                     </div>
                 </SheetFooter>
