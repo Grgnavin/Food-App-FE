@@ -4,9 +4,9 @@ import { Label } from '@/components/ui/label'
 import { ResturantFormSchema } from '@/schema/resturantSchem'
 import { useResturant } from '@/store/useResturantStore'
 import { Loader2 } from 'lucide-react'
-import React, { FormEvent, useState } from 'react'
+import React, { FormEvent, useEffect, useState } from 'react'
 
-type InputForm = {
+export type InputForm = {
     resturantName: string,
     city: string,
     country: string,
@@ -24,7 +24,7 @@ const Resturant: React.FC = () => {
         cuisines: [],
         imageFile: undefined,
     });
-    const { loading, createResturant, resturant, updateResturant } = useResturant();
+    const { loading, createResturant, resturant, updateResturant, getResturant } = useResturant();
     const[error, setError] = useState<Partial<InputForm>>({});
     const changeEventHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value, type } = e.target;
@@ -60,20 +60,30 @@ const Resturant: React.FC = () => {
                 //create
                 await createResturant(formData);
             }
-            // formData.forEach((val, key) => {
-            //     console.log(`${key}`, val);
-            // });
-            // if (formData.has('imageFile')) {
-            //     const file = formData.get('imagefile');
-            //     console.log("ImageFile", file);
-            // }else{
-            //     console.log("No image file here");
-            // }
         } catch (error) {
             console.log(error);
         }
         console.log(input); 
     };
+
+    useEffect(() => {
+        const fetchResturant = async() => {
+            await getResturant();
+            if (resturant) {
+                setInput({
+                    resturantName: resturant?.resturantName || "",
+                    city: resturant?.city || "",
+                    country: resturant?.country ||"",
+                    deliveryTime: resturant?.deliveryTime || 0,
+                    cuisines:  resturant?.cuisines ? resturant.cuisines.map((x: string) => x) : [],
+                    imageFile: undefined,
+                });
+            }
+        };
+        fetchResturant();
+        console.log(resturant);
+        
+    }, []);
 
     return (
         <div className='max-w-6xl mx-auto my-10'>

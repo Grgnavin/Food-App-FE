@@ -1,3 +1,4 @@
+import { InputForm } from "@/admin/Resturant";
 import axios from "axios";
 import { toast } from "sonner";
 import { create } from "zustand";
@@ -8,7 +9,7 @@ axios.defaults.withCredentials = true;
 
 type ResturantState = {
     loading: boolean,
-    resturant: null,
+    resturant: null | InputForm,
     searchResturantResult: null,
     createResturant: (formData: FormData) => Promise<void>,
     getResturant: () => Promise<void>,
