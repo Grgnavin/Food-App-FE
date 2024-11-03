@@ -1,4 +1,3 @@
-import { InputForm } from "@/admin/Resturant";
 import axios from "axios";
 import { toast } from "sonner";
 import { create } from "zustand";
@@ -9,12 +8,13 @@ axios.defaults.withCredentials = true;
 
 type ResturantState = {
     loading: boolean,
-    resturant: null | InputForm,
+    resturant: null ,
     searchResturantResult: null,
     createResturant: (formData: FormData) => Promise<void>,
     getResturant: () => Promise<void>,
     updateResturant: (formData: FormData) => Promise<void>,
     searchResturant: (searchText: string, searchQuery: string, selectedCuisines: string) => Promise<void>,
+    addMenuToResturant: (menu: any) => Promise<void>,
 }
 
 export const useResturant = create<ResturantState>()(
@@ -43,13 +43,19 @@ export const useResturant = create<ResturantState>()(
                 toast.error( error.response?.data.message ||"Error while creating resturant");
             }
         },
+        addMenuToResturant: (menu: any) => {
+            set((state : any) => ({
+                resturant: state.resturant 
+                            ? { ...state.resturant, menus:[...state.resturant.menus, menu] }
+                            : null
+            }))
+        },
         getResturant: async() => {
             try {
                 set({ loading: true });
                 const res = await axios.get(`${API_END_POINT}/`);
                 if(res.data.success) {
                     set({ loading: false, resturant: res.data.resturant });
-                    toast.success(res.data.message);
                 }else{
                     set({ loading: false });
                     toast.error("Error while getting resturant");

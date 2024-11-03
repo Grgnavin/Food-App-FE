@@ -84,7 +84,7 @@ const Resturant: React.FC = () => {
         console.log(resturant);
         
     }, []);
-
+    
     return (
         <div className='max-w-6xl mx-auto my-10'>
             <div>

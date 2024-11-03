@@ -3,24 +3,11 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Loader2, Plus } from 'lucide-react';
-import React, { ChangeEvent, useState } from 'react'
+import React, { ChangeEvent, useEffect, useState } from 'react'
 import EditMenu, { MenuFormSchema } from './EditMenu';
 import { MenuSchema } from '@/schema/menuSchema';
-
-const menus = [
-    {
-        name: "Biriyani",
-        description: "Lorem ipsum dolor sit amet,  elit. Mollitia reprehenderit odio",
-        price: 400,
-        image: "https://i0.wp.com/blog.petpooja.com/wp-content/uploads/2021/10/cultural-cuisine.jpg?resize=696%2C385&ssl=1"
-    },
-    {
-        name: "Pizza",
-        description: "Lorem ipsum dolor sit amet,  elit. Mollitia reprehenderit odio",
-        price: 400,
-        image: "https://i0.wp.com/blog.petpooja.com/wp-content/uploads/2021/10/cultural-cuisine.jpg?resize=696%2C385&ssl=1"
-    },
-];
+import { useMenu } from '@/store/useMenuStore';
+import { useResturant } from '@/store/useResturantStore';
 
 type Input = {
     name: string,
@@ -36,12 +23,14 @@ const AddMenu:React.FC = () => {
         price: 0,
         image: undefined
     });
+    const { resturant } = useResturant();
+    const { loading, createMenu } = useMenu();
     const[open, setOpen] = useState<boolean>(false);
     const[selectedMenu, setSelectedMenu] = useState<any>();
-    const loading = false;
     const[editOpen, setEditOpen] = useState<boolean>(false);
     const [error, setError] = useState<Partial<MenuFormSchema>>();
-    const SubmitHandler = (e: React.FormEvent<HTMLFormElement>) => {
+
+    const SubmitHandler = async(e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const res = MenuSchema.safeParse(input);
         if (!res.success) {
@@ -50,12 +39,28 @@ const AddMenu:React.FC = () => {
             return;
         }
         //api start here
+        try {
+            const formData = new FormData();
+            formData.append("name", input.name);
+            formData.append("description", input.description);
+            formData.append("price", input.price.toString());
+            if (input.image) {
+                formData.append('image', input.image);
+            }
+            await createMenu(formData);
+        } catch (error) {
+            console.log(error);
+        }
     };
 
     const ChangeEventHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value, type } = e.target;
         setInput({ ...input, [name]: type === "number" ? Number(value) :value});
     }
+    
+    useEffect(() => {
+        
+    }, [])
 
     return (
         <div className='max-w-6xl mx-auto my-10'>
@@ -145,7 +150,7 @@ const AddMenu:React.FC = () => {
             {/* Displaying the menus */}
             </div>
             {
-                menus.map((menu:any, idx: number) => (
+                resturant && resturant.menus && resturant.menus.map((menu:any, idx: number) => (
                     <div className='mt-6 space-y-4' key={idx}>
                         <div className='flex flex-col md:flex-row md:items-center md:space-x-4 md:p-4 p-2 shadow-md rounded-lg border'>
                                 <img 
