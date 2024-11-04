@@ -46,15 +46,18 @@ export const useMenu = create<MenuState>()(persist((set) => ({
                 }
             });
             if (res.data.success) {
-                toast.success(res.data.message);
+                console.log(res.data);
+                toast.success(res.data.messsage);
                 set({ loading: false , menu: res.data.menu});
             }
+            //update resturant menus
+            useResturant.getState().updateMenuToResturant(res.data.menu);
         } catch (error: any) {
             console.log(error);
             set({ loading: false });
             toast.error( error.response?.data.message ||"Error while creating resturant");
         }
-    },
+    }
 }), {
     name: "menu-name",
     storage: createJSONStorage(() => localStorage)

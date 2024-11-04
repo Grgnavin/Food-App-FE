@@ -10,6 +10,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { MenuSchema } from "@/schema/menuSchema";
+import { useMenu } from "@/store/useMenuStore";
 import { Loader2 } from "lucide-react";
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 
@@ -36,17 +37,23 @@ const EditMenu = ({
     image: undefined
 });
 const[error, setError] = useState<Partial<MenuFormSchema>>({});
-const loading = false;
-
-  const SubmitHandler = (e: React.FormEvent<HTMLFormElement>) => {
+const { editMenu, loading } = useMenu();
+  const SubmitHandler = async(e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      console.log(input);
       const res = MenuSchema.safeParse(input);
         if (!res.success) {
             const fieldError = res.error.formErrors.fieldErrors;
             setError(fieldError as Partial<MenuFormSchema>);
             return;
         }
+        const formData = new FormData();
+            formData.append("name", input.name);
+            formData.append("description", input.description);
+            formData.append("price", input.price.toString());
+            if (input.image) {
+                formData.append('image', input.image);
+            }
+          await editMenu(formData ,selectedMenu._id);
   }; 
 
 const ChangeEventHandler = (e: React.ChangeEvent<HTMLInputElement>) => {

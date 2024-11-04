@@ -15,6 +15,7 @@ type ResturantState = {
     updateResturant: (formData: FormData) => Promise<void>,
     searchResturant: (searchText: string, searchQuery: string, selectedCuisines: string) => Promise<void>,
     addMenuToResturant: (menu: any) => Promise<void>,
+    updateMenuToResturant: (updatedMenu: any) => Promise<void>
 }
 
 export const useResturant = create<ResturantState>()(
@@ -42,6 +43,19 @@ export const useResturant = create<ResturantState>()(
                 set({ loading: false });
                 toast.error( error.response?.data.message ||"Error while creating resturant");
             }
+        },
+        updateMenuToResturant: async(updatedMenu: any) => {
+            set((state:any) => {
+                if (state.resturant) {
+                    const updatedMenuList = state.resturant.menus.map((menu: any) => menu._id === updatedMenu._id ? updatedMenu : menu);
+                    return {
+                        resturant: {
+                            ...state.resturant,
+                            menus: updatedMenuList
+                        }
+                    }
+                }
+            })
         },
         addMenuToResturant: (menu: any) => {
             set((state : any) => ({
@@ -111,6 +125,7 @@ export const useResturant = create<ResturantState>()(
                 toast.error( error.response?.data.message ||"Error while creating resturant");
             }
         },
+        
     }), 
     {
         name: "resturant",
