@@ -2,6 +2,7 @@ import React from 'react'
 import { Button } from './ui/button'
 import { Checkbox } from './ui/checkbox';
 import { Label } from './ui/label';
+import { useResturant } from '@/store/useResturantStore';
 
 export interface IFilterOptions {
   id: string,
@@ -29,9 +30,9 @@ const filterOptions: IFilterOptions[] = [
 
 
 const FilterPage:React.FC = () => {
-
+  const { setAppliedFilter } = useResturant();
   const appliedFilterHandler = (val: string) => {
-
+    setAppliedFilter(val);
   }
 
   return (

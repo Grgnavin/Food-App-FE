@@ -1,3 +1,4 @@
+import { ResturantState } from "@/types/resturantTypes";
 import axios from "axios";
 import { toast } from "sonner";
 import { create } from "zustand";
@@ -6,23 +7,12 @@ import { createJSONStorage, persist } from "zustand/middleware";
 const API_END_POINT = "http://localhost:8000/api/v1/resturant";
 axios.defaults.withCredentials = true;
 
-type ResturantState = {
-    loading: boolean,
-    resturant: null ,
-    searchResturantResult: null,
-    createResturant: (formData: FormData) => Promise<void>,
-    getResturant: () => Promise<void>,
-    updateResturant: (formData: FormData) => Promise<void>,
-    searchResturant: (searchText: string, searchQuery: string, selectedCuisines: string) => Promise<void>,
-    addMenuToResturant: (menu: any) => Promise<void>,
-    updateMenuToResturant: (updatedMenu: any) => Promise<void>
-}
-
 export const useResturant = create<ResturantState>()(
     persist((set)=> ({
         loading: false,
         resturant: null,
         searchResturantResult: null,
+        appliedFilter: [],
         createResturant: async(formData: FormData) => {
             try {
                 set({ loading: true });
@@ -55,6 +45,7 @@ export const useResturant = create<ResturantState>()(
                         }
                     }
                 }
+                return state;
             })
         },
         addMenuToResturant: (menu: any) => {
@@ -63,7 +54,7 @@ export const useResturant = create<ResturantState>()(
                             ? { ...state.resturant, menus:[...state.resturant.menus, menu] }
                             : null
             }))
-        },
+        }, 
         getResturant: async() => {
             try {
                 set({ loading: true });
@@ -104,16 +95,17 @@ export const useResturant = create<ResturantState>()(
                 toast.error( error.response?.data.message ||"Error while creating resturant");
             }
         },
-        searchResturant: async(searchText: string, searchQuery: string, selectedCuisines: string) => {
+        searchResturant: async(searchText: string, searchQuery: string, selectedCuisines: any) => {
             try {
                 set({ loading: true });
+                
                 const params = new URLSearchParams();
                 params.set("searchQuery", searchQuery);
-                params.set("selectedCuisines", selectedCuisines);
-                const res = await axios.get(`${API_END_POINT}/search/:${searchText}?searchQuery=${searchQuery}?${params.toString()}`);
+                params.set("selectedCuisines", selectedCuisines.join(','));
+                // await new Promise((resolve) => setTimeout(resolve, 5000) );
+                const res = await axios.get(`${API_END_POINT}/search/${searchText}?${params.toString()}`);
                 if (res.data.success) {
                     toast.success(res.data.message);
-                    console.log(res.data);
                     set({ loading: false, searchResturantResult: res.data.resturants });
                 }else{
                     set({ loading: false });
@@ -125,7 +117,13 @@ export const useResturant = create<ResturantState>()(
                 toast.error( error.response?.data.message ||"Error while creating resturant");
             }
         },
-        
+        setAppliedFilter: (value: string) => {
+            set((state: any) => {
+                const isAlreadyApplied = state.appliedFilter.includes(value);
+                const updatedFilter = isAlreadyApplied ? state.appliedFilter.filter((item:any) => item !== value) : [...state.appliedFilter, value];
+                return { appliedFilter: updatedFilter }
+            })
+        }
     }), 
     {
         name: "resturant",

@@ -3,13 +3,7 @@ import { create } from "zustand";
 import axios from "axios";
 import { toast } from 'sonner';
 import { useResturant } from './useResturantStore';
-
-type MenuState = {
-    loading: boolean;
-    menu: null;
-    createMenu: (formdata: FormData) => Promise<void>,
-    editMenu: (formdata: FormData, menuId: string) => Promise<void>
-}
+import { MenuState } from '@/types/menuTypes';
 
 const API_END_POINT = "http://localhost:8000/api/v1/menu";
 axios.defaults.withCredentials = true;
