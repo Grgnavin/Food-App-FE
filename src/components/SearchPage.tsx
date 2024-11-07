@@ -16,12 +16,11 @@ import { Resturant } from '@/types/resturantTypes';
 const SearchPage: React.FC = () => {
     const params = useParams();
     const [searchQuery, setSearchQuery] = useState<string>("");
-    const { loading ,searchResturant, searchResturantResult, appliedFilter } = useResturant();
+    const { loading ,searchResturant, searchResturantResult, setAppliedFilter, appliedFilter } = useResturant();
     
     useEffect(() => {
         searchResturant(params.text!, searchQuery, appliedFilter);
-    }, [params.text! ,appliedFilter, searchQuery]);
-    console.log(searchResturantResult);
+    }, [params.text! ,appliedFilter]);
     
     return (
         <div className='max-w-7xl mx-auto my-10'>
@@ -35,7 +34,9 @@ const SearchPage: React.FC = () => {
                             placeholder='Search by resturant & cuisines'
                             onChange={(e) => setSearchQuery(e.target.value)}
                         />
-                        <Button className='bg-orange hover:bg-hoverOrange'>Search</Button>
+                        <Button className='bg-orange hover:bg-hoverOrange' onClick={() => searchResturant(params.text!, searchQuery, appliedFilter)}>
+                            Search
+                        </Button>
                     </div>
                     {/* Searched Items Display here */}
                     <div>
@@ -43,10 +44,13 @@ const SearchPage: React.FC = () => {
                             <h1 className='font-medium text-lg'>({searchResturantResult?.length}) Search Result Found</h1>
                             <div className='flex flex-wrap gap-2 mb-4 md:mb-0'>
                                 {
-                                    ["biryani", "momo"].map((selectedFilter: string, idx: number) => (
+                                    appliedFilter.map((selectedFilter: string, idx: number) => (
                                         <div key={idx} className='relative inline-flex max-w-full'>
-                                            <Badge className='text-[#D19254] rounded-md hover:cursor-pointer pr-6 whitespace-nowrap' variant="outline">{selectedFilter}</Badge>
+                                            <Badge className='text-[#D19254] rounded-md hover:cursor-pointer pr-6 whitespace-nowrap' variant="outline">
+                                                {selectedFilter}
+                                            </Badge>
                                         <X
+                                            onClick={() => setAppliedFilter(selectedFilter)}
                                             className='absolute text-[#D19254] right-1 hover:cursor-pointer'
                                             size={19}
                                         />
@@ -59,7 +63,7 @@ const SearchPage: React.FC = () => {
                         <div className='grid md:grid-cols-3 gap-4'>
                             {
                                 loading ? <SearchPageSkeleton /> : (
-                                    !loading && searchResturantResult?.length === 0 ? <NoResultFound searchText={params.text!}/> : (
+                                    !loading && searchResturantResult?.length === 0 ? <NoResultFound searchText={params.text!} searchQuery={searchQuery}/> : (
                                         searchResturantResult && searchResturantResult?.map((resturant: Resturant) => (
                                             <Card key={resturant._id} className='bg-white dark:bg-gray-800 shadow-xl rounded-xl overflow-hidden hover:shadow-2xl transition-shadow duration-300'>
                                         <div className='relative'>
@@ -114,9 +118,6 @@ const SearchPage: React.FC = () => {
                                 )
                             }
                             
-                            
-                            
-                            
                         </div>
                     </div>
                 </div>
@@ -170,7 +171,7 @@ const NoResultFound = ({ searchText }: { searchText: string }) => {
             No results found
             </h1>
             <p className="mt-2 text-gray-500 dark:text-gray-400">
-            We couldn't find any results for "{searchText}". <br /> Try searching
+            We couldn’t find any results for <span className="font-bold">"{searchText}"</span> <br />
             with a different term.
             </p>
             <Link to="/">

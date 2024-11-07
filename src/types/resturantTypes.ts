@@ -29,7 +29,8 @@ export type ResturantState = {
     searchResturant: (searchText: string, searchQuery: string, selectedCuisines: any) => Promise<void>,
     addMenuToResturant: (menu: any) => void,
     updateMenuToResturant: (updatedMenu: any) => void,
-    setAppliedFilter: (value: string) => void
+    setAppliedFilter: (value: string) => void,
+    resetFilter: () => void
 }
 
 export type ResturantResult =  {

@@ -105,7 +105,6 @@ export const useResturant = create<ResturantState>()(
                 // await new Promise((resolve) => setTimeout(resolve, 5000) );
                 const res = await axios.get(`${API_END_POINT}/search/${searchText}?${params.toString()}`);
                 if (res.data.success) {
-                    toast.success(res.data.message);
                     set({ loading: false, searchResturantResult: res.data.resturants });
                 }else{
                     set({ loading: false });
@@ -123,6 +122,9 @@ export const useResturant = create<ResturantState>()(
                 const updatedFilter = isAlreadyApplied ? state.appliedFilter.filter((item:any) => item !== value) : [...state.appliedFilter, value];
                 return { appliedFilter: updatedFilter }
             })
+        },
+        resetFilter: () => {
+            set({ appliedFilter: [] });
         }
     }), 
     {
