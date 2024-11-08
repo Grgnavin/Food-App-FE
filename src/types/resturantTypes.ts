@@ -21,6 +21,7 @@ export type Resturant = {
 export type ResturantState = {
     loading: boolean,
     resturant: null | Resturant,
+    singleResturant: Resturant | null,
     searchResturantResult: null | Resturant[],
     appliedFilter: string[],
     createResturant: (formData: FormData) => Promise<void>,
@@ -30,7 +31,8 @@ export type ResturantState = {
     addMenuToResturant: (menu: any) => void,
     updateMenuToResturant: (updatedMenu: any) => void,
     setAppliedFilter: (value: string) => void,
-    resetFilter: () => void
+    resetFilter: () => void,
+    getSingleResturant: (resturantId: string) => Promise<void>
 }
 
 export type ResturantResult =  {

@@ -1,4 +1,4 @@
-import { ResturantState } from "@/types/resturantTypes";
+import { ResturantState, Resturant } from "@/types/resturantTypes";
 import axios from "axios";
 import { toast } from "sonner";
 import { create } from "zustand";
@@ -11,6 +11,7 @@ export const useResturant = create<ResturantState>()(
     persist((set)=> ({
         loading: false,
         resturant: null,
+        singleResturant: null,
         searchResturantResult: null,
         appliedFilter: [],
         createResturant: async(formData: FormData) => {
@@ -125,6 +126,16 @@ export const useResturant = create<ResturantState>()(
         },
         resetFilter: () => {
             set({ appliedFilter: [] });
+        },
+        getSingleResturant: async(resturantId: string) => {
+            try {
+                const res = await axios.get(`${API_END_POINT}/${resturantId}`);
+                if (res.data.success) {
+                    set({ singleResturant: res.data.resturant });
+                }
+            } catch (err:any) {
+                console.log(err);
+            }
         }
     }), 
     {

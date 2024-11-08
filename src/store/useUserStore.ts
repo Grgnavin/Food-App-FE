@@ -3,6 +3,7 @@ import { create } from "zustand";
 import axios from "axios";
 import { LoginInput, SignupInput } from '@/schema/userSchema';
 import { toast } from 'sonner';
+import Cookies from "js-cookie";
 
 type User = {
     fullname: string,
@@ -12,7 +13,8 @@ type User = {
     country: string,
     profilePicture: string,
     admin: boolean,
-    isVerified: boolean
+    isVerified: boolean,
+    address: string
 }
 
 type InputType = {
@@ -181,20 +183,18 @@ export const useUserStore = create<UserStore>()(
         //updateProfile api implementation
         updateProfile: async(input: InputType) => {
             try {
-                set({ loading: true });
-                const res = await axios.put(`${API_END_POINT}/profile/update`, {input}, {
+                const res = await axios.put(`${API_END_POINT}/profile/update`, input, {
                     headers: {
                         'Content-Type': "application/json"
                     }
                 });
                 if (res.data.success) {
-                    set({ loading: false, user: res.data.user, isAuthenticated: true, isCheckingAuth: false });
+                    set({ user: res.data.user, isAuthenticated: true, isCheckingAuth: false });
                     toast.success(res.data.message);
                 }else{
-                    set({ loading: false, isAuthenticated: false });
+                    set({ isAuthenticated: false });
                 }
             } catch (error: any) {
-                set({ loading: false });
                 toast.error(error.response?.data.message || "Verification failed");
             }
         }

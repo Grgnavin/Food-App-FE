@@ -4,27 +4,21 @@ import { Loader2, LocateIcon, Mail, MapPin, MapPinnedIcon, Plus } from 'lucide-r
 import { Input } from './ui/input';
 import { Label } from './ui/label';
 import { Button } from './ui/button';
-
-// type ProfileData = {
-//     fullname: string,
-//     email: string,
-//     phone: string,
-//     address: string,
-//     city: string,
-//     country: string,
-// }
+import { useUserStore } from '@/store/useUserStore';
 
 const Profile:React.FC = () => {
+    const { user, updateProfile } = useUserStore();
+    const[isLoading, setIsLoading] = useState<boolean>(false);
     const[profileData, setProfileData] = useState({
-        fullname: "",
-        email: "",
-        address: "",
-        city: "",
-        country: "",
-        profilePicture: ""
+        fullname: user?.fullname || "",
+        email: user?.email || "",
+        address: user?.address || "",
+        city:  user?.city || "",
+        country: user?.country ||"",
+        profilePicture: user?.profilePicture || ""
     }); 
     const imageRef = useRef<HTMLInputElement | null>(null);
-    const[selectedProfilePicture, setSelectedProfilePicture] = useState<string>("");
+    const[selectedProfilePicture, setSelectedProfilePicture] = useState<string>(profileData?.profilePicture || "");
     const fileChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
@@ -46,12 +40,18 @@ const Profile:React.FC = () => {
         setProfileData({...profileData, [name]: value});
     }
 
-    const updateProfileHandler = (e: React.FormEvent<HTMLFormElement>) => {
+    const updateProfileHandler = async(e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         //api implementation
-        
+        try {
+            setIsLoading(true);
+            await updateProfile(profileData);
+            setIsLoading(false);
+        } catch (error) {
+            console.log(error);
+            setIsLoading(false);
+        }
     }
-    const loading = false;
     return (
         <form onSubmit={updateProfileHandler} className='max-w-7xl mx-auto my-5'>
             <div className='flex items-center justify-between'>
@@ -84,6 +84,7 @@ const Profile:React.FC = () => {
                     <div className='w-full'>
                         <Label>Email</Label>
                         <input 
+                            disabled
                             type="text" 
                             name="email"
                             value={profileData.email}
@@ -134,7 +135,7 @@ const Profile:React.FC = () => {
             </div>
             <div className='text-center'>
                     {
-                        loading ? <Button disabled className='bg-orange hover:bg-hoverOrange w-full mt-2'><Loader2 className='mr-2 h-4 w-4 animate-spin '/>Please wait</Button>
+                        isLoading ? <Button disabled className='bg-orange hover:bg-hoverOrange w-full mt-2'><Loader2 className='mr-2 h-4 w-4 animate-spin '/>Please wait</Button>
                         : <Button className='bg-orange hover:bg-hoverOrange w-full mt-2'>Update</Button>
                     }
             </div>

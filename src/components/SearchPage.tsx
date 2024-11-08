@@ -105,7 +105,7 @@ const SearchPage: React.FC = () => {
                                             </div>
                                         </CardContent>
                                         <CardFooter className='p-4 border-t dark:border-t-gray-700 border-t-gray-100 text-white flex justify-end'>
-                                            <Link to={`/resturant/${123}`}>
+                                            <Link to={`/resturant/${resturant._id}`}>
                                                 <Button className='bg-orange hover:bg-hoverOrange font-semibold py-2 px-4 rounded-full shadow-md transition-colors duration-200'
                                                 >
                                                     View Menus
