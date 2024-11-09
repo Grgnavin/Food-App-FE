@@ -1,8 +1,9 @@
-import React, { Dispatch, SetStateAction, useState } from 'react'
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogTitle } from './ui/dialog'
 import { Label } from './ui/label'
 import { Input } from './ui/input'
 import { Button } from './ui/button'
+import { useUserStore } from '@/store/useUserStore'
 
 type Input = {
     name: string,
@@ -19,20 +20,20 @@ const CheckoutConfirm = ({
     open:boolean, 
     setOpen: Dispatch<SetStateAction<boolean>>
 }) => {
+    const { user } = useUserStore();
     const[input, setInput] = useState<Input>({
-        name: "",
-        email: "",
-        contact: "",
-        address: "",
-        city: "",
-        country: ""
+        name: user?.fullname || "",
+        email: user?.email || "",
+        contact: user?.contact || "",
+        address: user?.address || "",
+        city: user?.city || "",
+        country: user?.country || ""
     });
     const changeEventHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         console.log(e.target);
         setInput({...input, [name]:value});
     }
-
     const checkoutHandler = (e: React.FormEvent<HTMLFormElement> ) => {
         e.preventDefault();
         console.log(input);
@@ -45,6 +46,10 @@ const CheckoutConfirm = ({
             email: ""
         })
     }   
+
+    useEffect(() => {
+        
+    },[])
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>
@@ -66,6 +71,7 @@ const CheckoutConfirm = ({
                     <div>
                         <Label>Email</Label>
                         <Input
+                            disabled
                             type='email'
                             name='email'
                             value={input.email}

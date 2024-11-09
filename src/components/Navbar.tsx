@@ -9,10 +9,12 @@ import { AvatarFallback, AvatarImage } from '@radix-ui/react-avatar';
 import { Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from './ui/sheet';
 import { Separator } from './ui/separator';
 import { useUserStore } from '@/store/useUserStore';
+import { useCartStore } from '@/store/useCartStore';
 
 
 const Navbar: React.FC = () => {
     const { loading ,user, logout } = useUserStore();
+    const { cart } = useCartStore();
     return (
         <div className='max-w-7xl mx-auto'>
             <div className='flex items-center justify-between h-14'>
@@ -69,11 +71,17 @@ const Navbar: React.FC = () => {
                     </div>
                         <Link to={"/cart"} className='relative cursor-pointer'>
                             <ShoppingCart/>
-                            <Button size={'icon'} className='absolute -inset-y-3 left-2 text-xs rounded-full h-4 w-4 bg-red-500'>5</Button>
+                            {
+                                cart.length> 0 && (
+                                    <Button size={'icon'} className='absolute -inset-y-3 left-2 text-xs rounded-full h-4 w-4 bg-red-500'>
+                                        {cart.length}
+                                    </Button>
+                                )
+                            }
                         </Link>
                     <div>
                         <Avatar>
-                            <AvatarImage />
+                            <AvatarImage src={user?.profilePicture} alt='profilePhoto'/>
                                 <AvatarFallback>
                                     CN
                                 </AvatarFallback>
@@ -173,7 +181,7 @@ const MobileNavbar = () => {
                 <SheetFooter className='flex flex-col gap-4'>   
                     <div className='flex flex-row items-center gap-2'>
                         <Avatar>
-                            <AvatarImage/>
+                            <AvatarImage src={user?.profilePicture} />
                             <AvatarFallback>CN</AvatarFallback>
                         </Avatar>
                         <h1 className='font-semibold'>Melody Gurung</h1>

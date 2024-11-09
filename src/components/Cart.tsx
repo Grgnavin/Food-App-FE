@@ -4,10 +4,17 @@ import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, Table
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
 import { Minus, Plus } from 'lucide-react'
 import CheckoutConfirm from './CheckoutConfirm'
+import { useCartStore } from '@/store/useCartStore'
+import { MenuItems } from '@/types/resturantTypes'
+import { CartItems } from '@/types/cartTypes'
 
 
 const Cart:React.FC = () => {
     const[open, setOpen] = useState<boolean>(false);
+    const { cart, incrementQuantity, decrementQuantity } = useCartStore();
+    let totalAmount = cart.reduce((acc, ele) => {
+        return acc + ele.price * ele.quantity
+    }, 0);
     return (
         <div className='flex flex-col max-w-7xl mx-auto my-10'>
             <div className='flex justify-end'>
@@ -25,36 +32,45 @@ const Cart:React.FC = () => {
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    <TableRow>
+                    {
+                        cart.map((item: CartItems) => (
+                            <TableRow>
                         <TableCell>
                             <Avatar>
                                 <AvatarImage 
-                                    src=''
+                                    src={item.image}
                                     alt=''
                                     />
                                     <AvatarFallback>CN</AvatarFallback>
                             </Avatar>
                         </TableCell>
                         <TableCell>
-                            Biriyani
+                            {item.name}
                         </TableCell>
                         <TableCell>
-                            80
+                            {item.price}
                         </TableCell>
                         <TableCell>
                             <div className='w-fit flex items-center rounded-full border border-gray-100 dark:border-gray-800 shadow-md'>
-                                <Button size={'icon'} variant={'outline'} className='rounded-full bg-gray-200'><Minus/></Button>
-                                <Button disabled variant={'outline'} size={'icon'} className='font-bold'>1</Button>
-                                <Button variant={'outline'} size={'icon'} className='rounded-full bg-gray-200 hover:bg-gray-100 border-none'><Plus className=''/></Button>
+                                <Button onClick={() => decrementQuantity(item._id)} size={'icon'} variant={'outline'} className='rounded-full bg-gray-200'>
+                                    <Minus/>
+                                </Button>
+                                <Button disabled variant={'outline'} size={'icon'} className='font-bold'>{item.quantity}</Button>
+                                <Button onClick={() => incrementQuantity(item._id)} variant={'outline'} size={'icon'} className='rounded-full bg-gray-200 hover:bg-gray-100 border-none'>
+                                    <Plus className=''/>
+                                </Button>
                             </div>
                         </TableCell>
                         <TableCell>
-                            400
+                            {item.price * item.quantity}
                         </TableCell>
                         <TableCell className='text-right'>
                             <Button className='bg-orange hover:bg-hoverOrange' size={'sm'}>Remove</Button>
                         </TableCell>
                     </TableRow>
+                        ))
+                    }
+                    
                 </TableBody>
                 <TableFooter>
                     <TableRow className='text-xl'>
@@ -62,7 +78,7 @@ const Cart:React.FC = () => {
                             Total
                         </TableCell>
                         <TableCell className='text-right'>
-                            400
+                            {totalAmount}
                         </TableCell>
                     </TableRow>
                 </TableFooter>
