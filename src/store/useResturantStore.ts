@@ -1,4 +1,5 @@
-import { ResturantState, Resturant } from "@/types/resturantTypes";
+import { Orders } from "@/types/orderTypes";
+import { ResturantState } from "@/types/resturantTypes";
 import axios from "axios";
 import { toast } from "sonner";
 import { create } from "zustand";
@@ -8,12 +9,13 @@ const API_END_POINT = "http://localhost:8000/api/v1/resturant";
 axios.defaults.withCredentials = true;
 
 export const useResturant = create<ResturantState>()(
-    persist((set)=> ({
+    persist((set, get)=> ({
         loading: false,
         resturant: null,
         singleResturant: null,
         searchResturantResult: null,
         appliedFilter: [],
+        resturantOrders: [],
         createResturant: async(formData: FormData) => {
             try {
                 set({ loading: true });
@@ -135,6 +137,37 @@ export const useResturant = create<ResturantState>()(
                 }
             } catch (err:any) {
                 console.log(err);
+            }
+        },
+        getResturantOrders: async() => {
+            try {
+                const res = await axios.get(`${API_END_POINT}/order`);
+                if (res.data.success) {
+                    set({ resturantOrders: res.data.orders })
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        },
+        updateResturantOrder: async(orderId: string, status: string) => {
+            try {
+                set({ loading: true });
+                const res = await axios.put(`${API_END_POINT}/order/${orderId}/status`, { status }, {
+                    headers: {
+                        'Content-type': 'application/json'
+                    }
+                });
+                if (res.data.success) {
+                    const updatedOrder = get().resturantOrders.map((x: Orders) => {
+                        return x._id === orderId ? { ...x, status: res.data.status } : x
+                    })
+                    toast.success(res.data.message)
+                    set({ loading: false, resturantOrders: updatedOrder });
+                }
+            } catch (error: any) {
+                console.log(error);
+                toast.error(error.response.data.message)
+                set({ loading: false });
             }
         }
     }), 
