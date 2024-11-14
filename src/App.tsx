@@ -15,6 +15,8 @@ import AddMenu from "./admin/AddMenu";
 import Orders from "./admin/Orders";
 import SuccessPage from "./components/SuccessPage";
 import { useUserStore } from "./store/useUserStore";
+import { useThemeStore } from "./store/useThemeStore";
+import { useEffect } from "react";
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { isAuthenticated, user } = useUserStore();
@@ -133,6 +135,12 @@ const appRouter = createBrowserRouter([ {
 ])
 
 function App() {
+  const { initializeTheme } = useThemeStore();
+  //check user everytime the page reloads
+  useEffect(() => {
+    initializeTheme();
+  },[]);
+
   return (
     <main>
       <RouterProvider router={appRouter}>

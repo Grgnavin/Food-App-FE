@@ -10,11 +10,13 @@ import { Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHe
 import { Separator } from './ui/separator';
 import { useUserStore } from '@/store/useUserStore';
 import { useCartStore } from '@/store/useCartStore';
+import { useThemeStore } from '@/store/useThemeStore';
 
 
 const Navbar: React.FC = () => {
     const { loading ,user, logout } = useUserStore();
     const { cart } = useCartStore();
+    const{ theme, setTheme } = useThemeStore();
     return (
         <div className='max-w-7xl mx-auto'>
             <div className='flex items-center justify-between h-14'>
@@ -60,10 +62,10 @@ const Navbar: React.FC = () => {
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                            <DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => setTheme('light')}>
                             Light
                             </DropdownMenuItem>
-                            <DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => setTheme('dark')}>
                             Dark
                             </DropdownMenuItem>
                         </DropdownMenuContent>
@@ -111,6 +113,7 @@ export default Navbar;
 
 const MobileNavbar = () => {
     const navigate = useNavigate();
+    const{ setTheme } = useThemeStore();
     const { user, logout } = useUserStore();
     const handleNavigation = (path: string) => {
         navigate(path);
@@ -136,10 +139,10 @@ const MobileNavbar = () => {
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                            <DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => setTheme('light')}>
                                 Light
                             </DropdownMenuItem>
-                            <DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => setTheme('dark')}>
                                 Dark
                             </DropdownMenuItem>
                         </DropdownMenuContent>

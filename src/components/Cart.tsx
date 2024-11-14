@@ -5,14 +5,13 @@ import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
 import { Minus, Plus } from 'lucide-react'
 import CheckoutConfirm from './CheckoutConfirm'
 import { useCartStore } from '@/store/useCartStore'
-import { MenuItems } from '@/types/resturantTypes'
 import { CartItems } from '@/types/cartTypes'
 
 
 const Cart:React.FC = () => {
     const[open, setOpen] = useState<boolean>(false);
     const { cart, incrementQuantity, decrementQuantity } = useCartStore();
-    let totalAmount = cart.reduce((acc, ele) => {
+    const totalAmount = cart.reduce((acc, ele) => {
         return acc + ele.price * ele.quantity
     }, 0);
     return (
@@ -56,7 +55,7 @@ const Cart:React.FC = () => {
                                     <Minus/>
                                 </Button>
                                 <Button disabled variant={'outline'} size={'icon'} className='font-bold'>{item.quantity}</Button>
-                                <Button onClick={() => incrementQuantity(item._id)} variant={'outline'} size={'icon'} className='rounded-full bg-gray-200 hover:bg-gray-100 border-none'>
+                                <Button onClick={() => incrementQuantity(item._id)} variant={'outline'} size={'icon'} className='rounded-full bg-gray-200 border-none'>
                                     <Plus className=''/>
                                 </Button>
                             </div>
