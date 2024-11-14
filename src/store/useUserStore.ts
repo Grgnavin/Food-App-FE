@@ -60,7 +60,6 @@ export const useUserStore = create<UserStore>()(
                     }
                 });
                 if (response.data.success) {
-                    console.log(response.data);
                     toast.success(response.data.message);
                     set({ loading: false, user: response.data.user, isAuthenticated: true });
                 }else{
@@ -81,7 +80,6 @@ export const useUserStore = create<UserStore>()(
                     }
                 });
                 if (response.data.success) {
-                    console.log(response.data);
                     toast.success(response.data.message);
                     set({ loading: false, user: response.data.user, isAuthenticated: true });
                 }else{

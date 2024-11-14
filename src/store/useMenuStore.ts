@@ -40,7 +40,6 @@ export const useMenu = create<MenuState>()(persist((set) => ({
                 }
             });
             if (res.data.success) {
-                console.log(res.data);
                 toast.success(res.data.messsage);
                 set({ loading: false , menu: res.data.menu});
             }

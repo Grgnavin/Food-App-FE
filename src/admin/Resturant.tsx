@@ -63,7 +63,6 @@ const Resturant: React.FC = () => {
         } catch (error) {
             console.log(error);
         }
-        console.log(input); 
     };
 
     useEffect(() => {
@@ -81,7 +80,6 @@ const Resturant: React.FC = () => {
             }
         };
         fetchResturant();
-        console.log(resturant);
         
     }, []);
     

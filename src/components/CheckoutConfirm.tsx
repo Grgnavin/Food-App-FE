@@ -39,7 +39,6 @@ const CheckoutConfirm = ({
     const { loading ,createCheckoutSession } = useOrderStore();
     const changeEventHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        console.log(e.target);
         setInput({...input, [name]:value});
     }
     const checkoutHandler = async(e: React.FormEvent<HTMLFormElement> ) => {
