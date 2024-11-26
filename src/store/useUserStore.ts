@@ -3,7 +3,6 @@ import { create } from "zustand";
 import axios from "axios";
 import { LoginInput, SignupInput } from '@/schema/userSchema';
 import { toast } from 'sonner';
-import Cookies from "js-cookie";
 
 type User = {
     fullname: string,
@@ -11,7 +10,7 @@ type User = {
     contact: string,
     city: string,
     country: string,
-    profilePicture: string,
+    profilePicture: File | string,
     admin: boolean,
     isVerified: boolean,
     address: string
@@ -60,8 +59,8 @@ export const useUserStore = create<UserStore>()(
                     }
                 });
                 if (response.data.success) {
-                    toast.success(response.data.message);
                     set({ loading: false, user: response.data.user, isAuthenticated: true });
+                    toast.success(response.data.message);
                 }else{
                     set({ loading: false, isAuthenticated: false });
                 }

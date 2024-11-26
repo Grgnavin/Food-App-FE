@@ -22,7 +22,7 @@ const HeroSection: React.FC = () => {
                         type='text'
                         value={searchText}
                         onChange={(e) => setSearchText(e.target.value)}
-                        className='pl-10 shadow-xl '
+                        className='pl-10 shadow-xl focus:outline-none'
                         placeholder='Search resturant by name, city & country'
                     />
                     <Search  className='text-gray-500 absolute inset-y-2 left-2'/>

@@ -18,7 +18,7 @@ const Profile:React.FC = () => {
         profilePicture: user?.profilePicture || ""
     }); 
     const imageRef = useRef<HTMLInputElement | null>(null);
-    const[selectedProfilePicture, setSelectedProfilePicture] = useState<string>(profileData?.profilePicture || "");
+    const[selectedProfilePicture, setSelectedProfilePicture] = useState<string | File>(profileData?.profilePicture || "");
     const fileChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
@@ -45,7 +45,7 @@ const Profile:React.FC = () => {
         //api implementation
         try {
             setIsLoading(true);
-            await updateProfile(profileData);
+            await updateProfile(profileData!);
             setIsLoading(false);
         } catch (error) {
             console.log(error);
@@ -79,7 +79,7 @@ const Profile:React.FC = () => {
                 </div>
             </div>
             <div className='grid md:grid-cols-4 md:gap-2 gap-3 my-10'>
-                <div className='flex items-center gap-4 rounded-sm p-2 bg-gray-200'>
+                <div className='flex items-center gap-4 rounded-sm p-2 bg-gray-200 dark:bg-gray-300 dark:text-gray-600'>
                     <Mail className='text-gray-500 '/>
                     <div className='w-full'>
                         <Label>Email</Label>
@@ -93,7 +93,7 @@ const Profile:React.FC = () => {
                         />
                     </div>
                 </div>
-                <div className='flex items-center gap-4 rounded-sm p-2 bg-gray-200'>
+                <div className='flex items-center gap-4 rounded-sm p-2 bg-gray-200 dark:bg-gray-300 dark:text-gray-600'>
                     <LocateIcon className='text-gray-500'/>
                     <div className='w-full'>
                         <Label>Address</Label>
@@ -106,7 +106,7 @@ const Profile:React.FC = () => {
                         />
                     </div>
                 </div>
-                <div className='flex items-center gap-4 rounded-sm p-2 bg-gray-200'>
+                <div className='flex items-center gap-4 rounded-sm p-2 bg-gray-200 dark:bg-gray-300 dark:text-gray-600'>
                     <MapPin className='text-gray-500'/>
                     <div className='w-full'>
                         <Label>City</Label>
@@ -119,7 +119,7 @@ const Profile:React.FC = () => {
                         />
                     </div>
                 </div>
-                <div className='flex items-center gap-4 rounded-sm p-2 bg-gray-200'>
+                <div className='flex items-center gap-4 rounded-sm p-2 bg-gray-200 dark:bg-gray-300 dark:text-gray-600'>
                     <MapPinnedIcon className='text-gray-500'/>
                     <div className='w-full'>
                         <Label>Country</Label>
@@ -136,7 +136,7 @@ const Profile:React.FC = () => {
             <div className='text-center'>
                     {
                         isLoading ? <Button disabled className='bg-orange hover:bg-hoverOrange w-full mt-2'><Loader2 className='mr-2 h-4 w-4 animate-spin '/>Please wait</Button>
-                        : <Button className='bg-orange hover:bg-hoverOrange w-full mt-2'>Update</Button>
+                        : <Button type="submit" className='bg-orange hover:bg-hoverOrange w-full mt-2'>Update</Button>
                     }
             </div>
         </form>

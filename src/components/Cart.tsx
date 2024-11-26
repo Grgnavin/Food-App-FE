@@ -10,14 +10,19 @@ import { CartItems } from '@/types/cartTypes'
 
 const Cart:React.FC = () => {
     const[open, setOpen] = useState<boolean>(false);
-    const { cart, incrementQuantity, decrementQuantity } = useCartStore();
+    const { cart, incrementQuantity, decrementQuantity, removeFromCart, clearCart } = useCartStore();
     const totalAmount = cart.reduce((acc, ele) => {
         return acc + ele.price * ele.quantity
     }, 0);
+
+    const RemoveItem = (id: string) => {
+        return removeFromCart(id);
+    }
+
     return (
         <div className='flex flex-col max-w-7xl mx-auto my-10'>
             <div className='flex justify-end'>
-                <Button variant={"link"}>Clear All</Button>
+                <Button onClick={clearCart} variant={"link"}>Clear All</Button>
             </div>
             <Table>
                 <TableHeader>
@@ -51,11 +56,11 @@ const Cart:React.FC = () => {
                         </TableCell>
                         <TableCell>
                             <div className='w-fit flex items-center rounded-full border border-gray-100 dark:border-gray-800 shadow-md'>
-                                <Button onClick={() => decrementQuantity(item._id)} size={'icon'} variant={'outline'} className='rounded-full bg-gray-200'>
+                                <Button onClick={() => decrementQuantity(item._id)} size={'icon'} variant={'outline'} className='rounded-full bg-gray-200 dark:bg-gray-500 dark:hover:bg-gray-700'>
                                     <Minus/>
                                 </Button>
                                 <Button disabled variant={'outline'} size={'icon'} className='font-bold'>{item.quantity}</Button>
-                                <Button onClick={() => incrementQuantity(item._id)} variant={'outline'} size={'icon'} className='rounded-full bg-gray-200 border-none'>
+                                <Button onClick={() => incrementQuantity(item._id)} variant={'outline'} size={'icon'} className='rounded-full bg-gray-200 border-none dark:bg-gray-500 dark:hover:bg-gray-700'>
                                     <Plus className=''/>
                                 </Button>
                             </div>
@@ -64,7 +69,7 @@ const Cart:React.FC = () => {
                             {item.price * item.quantity}
                         </TableCell>
                         <TableCell className='text-right'>
-                            <Button className='bg-orange hover:bg-hoverOrange' size={'sm'}>Remove</Button>
+                            <Button className='bg-orange hover:bg-hoverOrange' onClick={() => RemoveItem(item._id)} size={'sm'}>Remove</Button>
                         </TableCell>
                     </TableRow>
                         ))

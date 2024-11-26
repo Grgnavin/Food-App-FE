@@ -159,8 +159,8 @@ const AddMenu:React.FC = () => {
                                     className='md:h-24 h-16 md:w-24 object-cover rounded-lg'
                                 />
                                 <div className='flex-1'>
-                                    <h1 className='text-lg font-medium text-gray-800'>Name: {menu.name}</h1>
-                                    <p className='text-sm text-gray-600 mt-1'>{menu.description}</p>
+                                    <h1 className='text-lg font-medium text-gray-800 dark:text-gray-200'>Name: {menu.name}</h1>
+                                    <p className='text-sm text-gray-600 mt-1 dark:text-gray-200'>{menu.description}</p>
                                     <h2 className='text-md font-medium mt-1'>
                                         Price: <span>{menu.price}</span>
                                     </h2>

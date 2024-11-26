@@ -63,14 +63,14 @@ const Signup: React.FC = () => {
                 </div>
                 <div className='mb-4'>
                 <div className='relative'>
-                <Input 
-                    type='text'
-                    name='contact'
-                    placeholder='Contact Number'
-                    className='pl-10 focus-visible:ring-1'
-                    value={input.contact}
-                    onChange={changeEventHandler}
-                />
+                    <Input 
+                        type='text'
+                        name='contact'
+                        placeholder='Contact Number'
+                        className='pl-10 focus-visible:ring-1'
+                        value={input.contact}
+                        onChange={changeEventHandler}
+                    />
                 <Contact className='absolute inset-y-2 left-2 text-gray-500 pointer-events-none'/>
                 {
                     errors && <span className='text-sm text-red-500'>{errors.contact}</span>
@@ -79,34 +79,34 @@ const Signup: React.FC = () => {
                 </div>
                 <div className='mb-4'>
                 <div className='relative'>
-                <Input 
-                    type='email'
-                    name='email'
-                    placeholder='Email'
-                    className='pl-10 focus-visible:ring-1'
-                    value={input.email}
-                    onChange={changeEventHandler}
-                />
-                <Mail className='absolute inset-y-2 left-2 text-gray-500 pointer-events-none'/>
-                {
-                    errors && <span className='text-sm text-red-500'>{errors.email}</span>
-                }
+                    <Input 
+                        type='email'
+                        name='email'
+                        placeholder='Email'
+                        className='pl-10 focus-visible:ring-1'
+                        value={input.email}
+                        onChange={changeEventHandler}
+                    />
+                    <Mail className='absolute inset-y-2 left-2 text-gray-500 pointer-events-none'/>
+                    {
+                        errors && <span className='text-sm text-red-500'>{errors.email}</span>
+                    }
                 </div>
                 </div>
                 <div className='mb-4'>
                 <div className='relative'>
-                <Input 
-                    type='password'
-                    name='password'
-                    placeholder=' Password'
-                    className='pl-10 focus-visible:ring-1'
-                    value={input.password}
-                    onChange={changeEventHandler}
-                />
-                <LockKeyhole className='absolute inset-y-2 left-2 text-gray-500 pointer-events-none'/>
-                {
-                    errors && <span className='text-sm text-red-500'>{errors.password}</span>
-                }
+                    <Input 
+                        type='password'
+                        name='password'
+                        placeholder=' Password'
+                        className='pl-10 focus-visible:ring-1'
+                        value={input.password}
+                        onChange={changeEventHandler}
+                    />
+                    <LockKeyhole className='absolute inset-y-2 left-2 text-gray-500 pointer-events-none'/>
+                    {
+                        errors && <span className='text-sm text-red-500'>{errors.password}</span>
+                    }
                 </div>
                 </div>
                 <div className='mb-10'>
