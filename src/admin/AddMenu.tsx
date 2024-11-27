@@ -3,7 +3,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Loader2, Plus } from 'lucide-react';
-import React, { ChangeEvent, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import EditMenu, { MenuFormSchema } from './EditMenu';
 import { MenuSchema } from '@/schema/menuSchema';
 import { useMenu } from '@/store/useMenuStore';

@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { MenuSchema } from "@/schema/menuSchema";
 import { useMenu } from "@/store/useMenuStore";
+import { MenuItems } from "@/types/resturantTypes";
 import { Loader2 } from "lucide-react";
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 
@@ -26,7 +27,7 @@ const EditMenu = ({
     editOpen,
     setEditOpen,
 }: {
-    selectedMenu: MenuFormSchema;
+    selectedMenu: MenuItems;
     editOpen: boolean;
     setEditOpen: Dispatch<SetStateAction<boolean>>;
 }) => {

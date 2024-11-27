@@ -1,14 +1,13 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useUserStore } from '@/store/useUserStore';
-import { Loader2 } from 'lucide-react';
 import React, { FormEvent, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 
 const VerifyEmail: React.FC = () => {
     const [otp, setOtp] = useState<string[]>(["", "", "", "", "", ""]);
     const inputRef = useRef<(HTMLInputElement | null)[]>([]);
-    const { loading, verifyEmail } = useUserStore();
+    const { verifyEmail } = useUserStore();
     const navigate = useNavigate();
     const handleChange = (index: number, value: string) => {
         if (/^[a-zA-Z0-9]$/.test(value) || value === "") {

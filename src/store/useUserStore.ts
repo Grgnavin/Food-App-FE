@@ -5,16 +5,16 @@ import { LoginInput, SignupInput } from '@/schema/userSchema';
 import { toast } from 'sonner';
 
 type User = {
-    fullname: string,
-    email: string,
-    contact: string,
-    city: string,
-    country: string,
-    profilePicture: File | string,
-    admin: boolean,
-    isVerified: boolean,
-    address: string
-}
+    fullname: string;
+    email: string;
+    contact: string;
+    city: string;
+    country: string;
+    profilePicture: string | File | undefined; 
+    admin: boolean;
+    isVerified: boolean;
+    address: string;
+};
 
 type InputType = {
     fullname?: string,
@@ -22,7 +22,7 @@ type InputType = {
     address?: string,
     city?: string,
     country?: string,
-    profilePicture?: File
+    profilePicture?: File | ""
 }
 
 interface UserStore {
@@ -178,7 +178,7 @@ export const useUserStore = create<UserStore>()(
             }
         },
         //updateProfile api implementation
-        updateProfile: async(input: InputType) => {
+        updateProfile: async(input: any) => {
             try {
                 const res = await axios.put(`${API_END_POINT}/profile/update`, input, {
                     headers: {

@@ -16,7 +16,7 @@ import { useThemeStore } from '@/store/useThemeStore';
 const Navbar: React.FC = () => {
     const { loading ,user, logout } = useUserStore();
     const { cart } = useCartStore();
-    const{ theme, setTheme } = useThemeStore();
+    const{ setTheme } = useThemeStore();
     return (
         <div className='max-w-7xl mx-auto'>
             <div className='flex items-center justify-between h-14'>
@@ -83,7 +83,11 @@ const Navbar: React.FC = () => {
                         </Link>
                     <div>
                         <Avatar>
-                            <AvatarImage src={user?.profilePicture} alt='profilePhoto'/>
+                            <AvatarImage src={
+                                typeof user?.profilePicture === "string" 
+                                ? user?.profilePicture
+                                : undefined
+                            } alt='profilePhoto'/>
                                 <AvatarFallback>
                                     CN
                                 </AvatarFallback>
@@ -184,7 +188,11 @@ const MobileNavbar = () => {
                 <SheetFooter className='flex flex-col gap-4'>   
                     <div className='flex flex-row items-center gap-2'>
                         <Avatar>
-                            <AvatarImage src={user?.profilePicture} />
+                            <AvatarImage src={
+                                    typeof user?.profilePicture === "string" 
+                                    ? user?.profilePicture
+                                    : undefined
+                            } />
                             <AvatarFallback>CN</AvatarFallback>
                         </Avatar>
                         <h1 className='font-semibold'>Melody Gurung</h1>

@@ -63,7 +63,7 @@ const SearchPage: React.FC = () => {
                         <div className='grid md:grid-cols-3 gap-4'>
                             {
                                 loading ? <SearchPageSkeleton /> : (
-                                    !loading && searchResturantResult?.length === 0 ? <NoResultFound searchText={params.text!} searchQuery={searchQuery}/> : (
+                                    !loading && searchResturantResult?.length === 0 ? <NoResultFound searchText={params.text!}/> : (
                                         searchResturantResult && searchResturantResult?.map((resturant: Resturant) => (
                                             <Card key={resturant._id} className='bg-white dark:bg-gray-800 shadow-xl rounded-xl overflow-hidden hover:shadow-2xl transition-shadow duration-300'>
                                         <div className='relative'>

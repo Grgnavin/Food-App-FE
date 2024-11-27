@@ -20,7 +20,8 @@ export type CheckoutSessionRequest = {
 export interface Orders extends CheckoutSessionRequest {
     _id: string,
     status: string,
-    totalAmount: number
+    totalAmount: number,
+    description?: string,
 };
 
 export type OrderState = {

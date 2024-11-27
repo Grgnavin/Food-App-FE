@@ -1,8 +1,16 @@
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { useResturant } from '@/store/useResturantStore'
-import { CartItems } from '@/types/cartTypes'
 import React, { useEffect } from 'react'
+
+type CartItemFromOrder = {
+    menuId: string;
+    name: string;
+    price: number;
+    image: string;
+    quantity: number;
+};
+
 
 const Orders: React.FC = () => {
     const { resturantOrders, getResturantOrders, updateResturantOrder } = useResturant();
@@ -15,19 +23,22 @@ const Orders: React.FC = () => {
         await updateResturantOrder(id, status);
     };
 
-    const calculateTotalAmount = (cartItems: CartItems[]) => {
+    const calculateTotalAmount = (cartItems: CartItemFromOrder[]) => {
         if (!Array.isArray(cartItems)) {
             return "Invalid cart items";
         }
         return cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
     };
-
+    resturantOrders.map((order) => {
+        console.log(order.cartItems);
+        
+    })
     return (
         <div className='max-w-6xl mx-auto py-10 px-6'>
             <h1 className='text-3xl font-medium text-gray-800 dark:text-white mb-10'>Orders Overview</h1>
             <div className='space-y-8'>
                 {/* Restaurant Orders Display */}
-                {resturantOrders.length > 0 && resturantOrders.map((order) => (
+                {resturantOrders &&  resturantOrders.length > 0 && resturantOrders.map((order) => (
                     <div key={order._id} className='flex flex-col md:flex-row justify-between items-start sm:items-center bg-white dark:bg-gray-800 shadow-lg rounded-xl p-6 sm:p-8 border-gray-200 dark:border-gray-700'>
                         <div className='flex-1 mb-6 sm:mb-0'>
                             <h1 className='text-xl font-semibold text-gray-700 dark:text-gray-100'>

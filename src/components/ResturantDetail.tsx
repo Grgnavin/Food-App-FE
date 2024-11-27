@@ -4,7 +4,6 @@ import { Timer } from 'lucide-react'
 import AvailableMenu from './AvailableMenu'
 import { useResturant } from '@/store/useResturantStore'
 import { useParams } from 'react-router-dom'
-import { useCartStore } from '@/store/useCartStore'
 
 const ResturantDetail: React.FC = () => {
     const params = useParams();
@@ -49,7 +48,7 @@ const ResturantDetail: React.FC = () => {
                     </div>
                 </div>
                 <div>
-                    <AvailableMenu menus={singleResturant?.menus}/>
+                    <AvailableMenu menus={singleResturant?.menus || []}/>
                 </div>
             </div>
         </div>
